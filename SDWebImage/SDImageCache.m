@@ -519,7 +519,16 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     });
 }
 
-- (void)storeDataToDisk:(NSData *)data forKey:(NSString *)key
+- (NSString *)pathForKey:(NSString *)key withExtension:(NSString *)pathExtension
+{
+    NSString *path = [self defaultCachePathForKey:key];
+    if (pathExtension) {
+        path = [path stringByAppendingPathExtension:pathExtension];
+    }
+    return path;
+}
+
+- (void)storeDataToDisk:(NSData *)data forKey:(NSString *)key extension:(NSString *)pathExtension
 {
     if (data == nil || key == nil) { return; }
 
@@ -527,14 +536,15 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
         [_fileManager createDirectoryAtPath:_diskCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
     }
     
-    [_fileManager createFileAtPath:[self defaultCachePathForKey:key] contents:data attributes:nil];
+    NSString *path = [self pathForKey:key withExtension:pathExtension];
+    [_fileManager createFileAtPath:path contents:data attributes:nil];
 }
 
-- (NSURL *)fileURLForDiskCacheItemWithKey:(NSString *)key
+- (NSURL *)fileURLForDiskCacheItemWithKey:(NSString *)key extension:(NSString *)pathExtension
 {
     if (key == nil) { return nil; }
     
-    NSString *path = [self defaultCachePathForKey:key];
+    NSString *path = [self pathForKey:key withExtension:pathExtension];
     if ([_fileManager fileExistsAtPath:path]) {
         NSURL *pathURL = [NSURL fileURLWithPath:path];
         return pathURL;

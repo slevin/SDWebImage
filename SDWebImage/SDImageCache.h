@@ -221,7 +221,7 @@ typedef void(^SDWebImageQueryCompletedBlock)(UIImage *image, SDImageCacheType ca
  */
 - (NSString *)defaultCachePathForKey:(NSString *)key;
 
-- (void)storeDataToDisk:(NSData *)data forKey:(NSString *)key;
-- (NSURL *)fileURLForDiskCacheItemWithKey:(NSString *)key;
+- (void)storeDataToDisk:(NSData *)data forKey:(NSString *)key extension:(NSString *)pathExtension;
+- (NSURL *)fileURLForDiskCacheItemWithKey:(NSString *)key extension:(NSString *)pathExtension;
 
 @end
