@@ -519,4 +519,28 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     });
 }
 
+- (void)storeDataToDisk:(NSData *)data forKey:(NSString *)key
+{
+    if (data == nil || key == nil) { return; }
+
+    if (![_fileManager fileExistsAtPath:_diskCachePath]) {
+        [_fileManager createDirectoryAtPath:_diskCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
+    }
+    
+    [_fileManager createFileAtPath:[self defaultCachePathForKey:key] contents:data attributes:nil];
+}
+
+- (NSURL *)fileURLForDiskCacheItemWithKey:(NSString *)key
+{
+    if (key == nil) { return nil; }
+    
+    NSString *path = [self defaultCachePathForKey:key];
+    if ([_fileManager fileExistsAtPath:path]) {
+        NSURL *pathURL = [NSURL fileURLWithPath:path];
+        return pathURL;
+    } else {
+        return nil;
+    }
+}
+
 @end
